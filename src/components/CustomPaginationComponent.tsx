@@ -16,11 +16,11 @@ const CustomPaginationComponent: React.FC<PaginationProps> = ({
   handlePrevious,
 }) => {
   return (
-    <div className="flex justify-center mt-6">
+    <div className="flex justify-center items-center mt-6 flex-wrap gap-2">
       <button
         onClick={handlePrevious}
         disabled={pageRange.start <= 1}
-        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-md hover:bg-gray-400 disabled:opacity-50"
+        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-md hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Previous
       </button>
@@ -29,7 +29,7 @@ const CustomPaginationComponent: React.FC<PaginationProps> = ({
         <button
           key={pageRange.start + index}
           onClick={() => handlePageChange(pageRange.start + index)}
-          className={`px-4 py-2 mx-1 ${
+          className={`px-4 py-2 ${
             currentPage === pageRange.start + index
               ? "bg-blue-500 text-white"
               : "bg-gray-300 text-gray-700"
@@ -42,7 +42,7 @@ const CustomPaginationComponent: React.FC<PaginationProps> = ({
       <button
         onClick={handleNext}
         disabled={pageRange.end >= totalPages}
-        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-md hover:bg-gray-400 disabled:opacity-50"
+        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-md hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Next
       </button>
