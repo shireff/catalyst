@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { usersApi } from "../../services/api";
 import axios from "axios";
+
 interface User {
   id: number;
   name: string;
@@ -27,17 +28,49 @@ const initialState: UsersState = {
 };
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const response = await usersApi.getAll();
-  return response.data;
+  try {
+    const response = await usersApi.getAll();
+    const baseUrl = "https://test.catalystegy.com/public/";
+
+    const updatedUsers = Array.isArray(response.data)
+      ? response.data.map((user: User) => {
+          const profileImage =
+            user.profile_image && typeof user.profile_image === "string"
+              ? baseUrl + user.profile_image
+              : user.profile_image;
+
+          return { ...user, profile_image: profileImage };
+        })
+      : [];
+
+    return updatedUsers;
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+    throw new Error("Failed to fetch users");
+  }
 });
+
 export const fetchUser = createAsyncThunk(
   "users/fetchUser",
   async (id: number) => {
-    const response = await usersApi.getOne(id);
-    return response.data;
+    try {
+      const response = await usersApi.getOne(id);
+      const baseUrl = "https://test.catalystegy.com/public/";
+
+      const user = response.data;
+
+      const profileImage =
+        user.profile_image && typeof user.profile_image === "string"
+          ? baseUrl + user.profile_image
+          : user.profile_image;
+
+      return { ...user, profile_image: profileImage };
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      throw new Error("Failed to fetch user");
+    }
   }
 );
-
 
 export const createUser = createAsyncThunk<User, FormData>(
   "users/createUser",

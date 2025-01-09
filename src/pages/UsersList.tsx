@@ -122,23 +122,25 @@ const UsersList = () => {
   };
 
   const handleFileChange = (file: File, fieldName: string) => {
-    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
     if (file.size > MAX_FILE_SIZE) {
       toast.error("File size exceeds the 10MB limit.");
       return;
     }
 
-    if (
-      fieldName === "profile_image" &&
-      !["image/jpeg", "image/png"].includes(file.type)
-    ) {
-      toast.error("Profile image must be a JPG or PNG file.");
-      return;
+    if (fieldName === "profile_image") {
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        toast.error("Profile image must be a JPG or PNG file.");
+        return;
+      }
     }
 
-    if (fieldName === "intro_video" && file.type !== "video/mp4") {
-      toast.error("Intro video must be an MP4 file.");
-      return;
+    if (fieldName === "intro_video") {
+      if (file.type !== "video/mp4") {
+        toast.error("Intro video must be an MP4 file.");
+        return;
+      }
     }
 
     setSelectedFile(file);

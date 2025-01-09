@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Property } from "../../types";
 import { propertiesApi } from "../../services/api";
+import { AxiosError } from "axios";
 
 interface PropertiesState {
   items: Property[];
@@ -73,25 +74,55 @@ export const fetchProperty = createAsyncThunk(
 
 export const createProperty = createAsyncThunk(
   "properties/createProperty",
-  async (propertyData: FormData) => {
-    const response = await propertiesApi.create(propertyData);
-    return response.data;
+  async (propertyData: FormData, { rejectWithValue }) => {
+    try {
+      const response = await propertiesApi.create(propertyData);
+      return response.data;
+    } catch (error: unknown) {
+      console.error("Error creating property:", error);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(
+          error.response?.data || "Error creating property"
+        );
+      }
+      return rejectWithValue("Error creating property");
+    }
   }
 );
 
 export const updateProperty = createAsyncThunk(
   "properties/updateProperty",
-  async ({ id, data }: { id: number; data: FormData }) => {
-    const response = await propertiesApi.update(id, data);
-    return response.data;
+  async ({ id, data }: { id: number; data: FormData }, { rejectWithValue }) => {
+    try {
+      const response = await propertiesApi.update(id, data);
+      return response.data;
+    } catch (error: unknown) {
+      console.error("Error updating property:", error);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(
+          error.response?.data || "Error updating property"
+        );
+      }
+      return rejectWithValue("Error updating property");
+    }
   }
 );
 
 export const deleteProperty = createAsyncThunk(
   "properties/deleteProperty",
-  async (id: number) => {
-    await propertiesApi.remove(id);
-    return id;
+  async (id: number, { rejectWithValue }) => {
+    try {
+      await propertiesApi.remove(id); 
+      return id; 
+    } catch (error: unknown) {
+      console.error("Error deleting property:", error);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(
+          error.response?.data || "Error deleting property"
+        );
+      }
+      return rejectWithValue("Error deleting property");
+    }
   }
 );
 
@@ -137,8 +168,16 @@ const propertiesSlice = createSlice({
           state.items[index] = action.payload;
         }
       })
+      .addCase(deleteProperty.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(deleteProperty.fulfilled, (state, action) => {
-        state.items = state.items.filter((prop) => prop.id !== action.payload);
+        state.loading = false;
+        state.items = state.items.filter((property) => property.id !== action.payload);
+      })
+      .addCase(deleteProperty.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

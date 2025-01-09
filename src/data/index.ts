@@ -5,6 +5,7 @@ export const editUserFields = [
     type: "file",
     required: false,
   },
+
   { label: "Name", name: "name", type: "text", required: true },
   { label: "Email", name: "email", type: "email", required: true },
   { label: "Phone", name: "phone", type: "tel", required: false },
@@ -85,8 +86,8 @@ export const AddPropertyFields = [
   { label: "Location", name: "location", type: "text", required: true },
   { label: "Price", name: "price", type: "number", required: true },
   {
-    label: "Images",
-    name: "images",
+    label: "Image",
+    name: "profile_image",
     type: "file",
     required: false,
   },
