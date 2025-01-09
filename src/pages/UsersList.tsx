@@ -55,6 +55,7 @@ const UsersList = () => {
   } = useSelector((state: RootState) => state.users);
   const [selectedRole, setSelectedRole] = useState<User["role"] | "all">("all");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -148,7 +149,7 @@ const UsersList = () => {
       if (!userData.id) {
         throw new Error("User ID is missing.");
       }
-
+      setFormLoading(true);
       const formData = new FormData();
 
       Object.keys(userData).forEach((key) => {
@@ -194,6 +195,8 @@ const UsersList = () => {
       } else {
         toast.error("Failed to update user. Please try again.");
       }
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -202,7 +205,7 @@ const UsersList = () => {
       toast.error("Name and Email are required.");
       return;
     }
-
+    setFormLoading(true);
     try {
       const formData = new FormData();
 
@@ -242,6 +245,8 @@ const UsersList = () => {
     } catch (error) {
       console.error("Error adding user:", error);
       toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -371,6 +376,7 @@ const UsersList = () => {
           onFileChange={handleFileChange}
           closeModal={() => setIsOpenAdd(false)}
           initializeData={initializeAddUserData}
+          loading={formLoading}
         />
       </Modal>
 
@@ -386,6 +392,8 @@ const UsersList = () => {
           onFileChange={handleFileChange}
           closeModal={() => setIsOpenEdit(false)}
           initializeData={initializeEditUserData}
+          loading={formLoading}
+          submitLabel="Save"
         />
       </Modal>
     </div>
