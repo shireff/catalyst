@@ -23,26 +23,27 @@ const statusColors = {
   confirmed: "bg-green-100 text-green-800",
   cancelled: "bg-red-100 text-red-800",
 };
-const initializeAddBookingData:  BookingData = {
-  id: Math.floor(Math.random() * 1000), 
-  name: "", 
-  email: "", 
+const initializeAddBookingData: BookingData = {
+  id: Math.floor(Math.random() * 1000),
+  name: "",
+  email: "",
   phone: "",
-  role: "client", 
-  profile_image: null, 
+  role: "client",
+  profile_image: null,
   intro_video: null,
   user_id: Math.floor(Math.random() * 1000),
-  property_id: Math.floor(Math.random() * 1000), 
+  property_id: Math.floor(Math.random() * 1000),
   property_name: "",
-  start_date: new Date().toISOString().split("T")[0], 
+  start_date: new Date().toISOString().split("T")[0],
   end_date: "",
-  status: "pending", 
+  status: "pending",
 };
 
 export default function BookingsList() {
   const [isOpenRemove, setIsOpenRemove] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [isOpenAdd, setIsOpenAdd] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -92,9 +93,9 @@ export default function BookingsList() {
       });
     }
   };
-
   const handleDeleteBooking = async (id: number) => {
     try {
+      setFormLoading(true);
       const result = await dispatch(deleteBooking(id));
 
       if (deleteBooking.fulfilled.match(result)) {
@@ -108,18 +109,25 @@ export default function BookingsList() {
         throw new Error(errorMessage);
       }
     } catch (error) {
+      if (error instanceof Error) {
+        toast.error(`Error: ${error.message}`);
+      } else {
+        toast.error(
+          "An unknown error occurred while deleting the booking. Please try again."
+        );
+      }
+
       console.error("Delete booking error:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred while deleting the booking."
-      );
+    } finally {
+      setFormLoading(false); 
     }
   };
 
   const handleConfirmBooking = async (id: number) => {
     try {
+      setFormLoading(true); 
       setIsOpenConfirm(false);
+
       const result = await dispatch(
         updateBookingStatus({ id, status: "confirmed" })
       );
@@ -134,12 +142,17 @@ export default function BookingsList() {
         throw new Error(errorMessage);
       }
     } catch (error) {
+      if (error instanceof Error) {
+        toast.error(`Error: ${error.message}`);
+      } else {
+        toast.error(
+          "An unknown error occurred while confirming the booking. Please try again."
+        );
+      }
+
       console.error("Confirm booking error:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred while confirming the booking."
-      );
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -171,6 +184,7 @@ export default function BookingsList() {
     }
 
     try {
+      setFormLoading(true); 
       const result = await dispatch(createBooking(payload));
 
       if (createBooking.fulfilled.match(result)) {
@@ -190,6 +204,8 @@ export default function BookingsList() {
         console.error("Unknown error adding booking:", error);
         toast.error("An unknown error occurred. Please try again.");
       }
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -393,6 +409,7 @@ export default function BookingsList() {
           onSave={handleAddBooking}
           closeModal={() => setIsOpenAdd(false)}
           initializeData={initializeAddBookingData}
+          loading={formLoading}
         />
       </Modal>
     </div>

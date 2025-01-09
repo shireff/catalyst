@@ -181,20 +181,37 @@ const UsersList = () => {
         setSelectedFile(null);
         dispatch(fetchUsers());
       } else {
-        throw new Error(result.error.message || "Failed to update user.");
+        const validationErrors = result.payload;
+        if (validationErrors) {
+          Object.entries(validationErrors).forEach(([, messages]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((message) => toast.error(message));
+            }
+          });
+        } else {
+          throw new Error(result.error.message || "Failed to update user.");
+        }
       }
     } catch (error) {
-      console.error("Error updating user:", error);
-      if (
-        error instanceof Error &&
-        error.message.includes("Validation Error")
-      ) {
-        toast.error(
-          "Please check the file types. Images must be JPG/PNG and videos must be MP4."
-        );
+      if (error instanceof Error) {
+        if (error.message.includes("Network Error")) {
+          toast.error("Network error: Please check your internet connection.");
+        } else if (error.message.includes("Validation Error")) {
+          toast.error(
+            "Validation error: Please check the file types. Images must be JPG/PNG and videos must be MP4."
+          );
+        } else if (error.message.includes("User ID is missing")) {
+          toast.error("Error: User ID is required to update the user.");
+        } else {
+          toast.error(`Error: ${error.message}`);
+        }
+      } else if (typeof error === "string") {
+        toast.error(`Error: ${error}`);
       } else {
         toast.error("Failed to update user. Please try again.");
       }
+
+      console.error("Error updating user:", error);
     } finally {
       setFormLoading(false);
     }
@@ -224,6 +241,7 @@ const UsersList = () => {
       if (selectedFile) {
         formData.append("file", selectedFile);
       }
+
       const result = await dispatch(createUser(formData));
 
       if (createUser.fulfilled.match(result)) {
@@ -243,6 +261,20 @@ const UsersList = () => {
         }
       }
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("Network Error")) {
+          toast.error("Network error: Please check your internet connection.");
+        } else if (error.message.includes("Validation Error")) {
+          toast.error("Validation error: Please check the input fields.");
+        } else {
+          toast.error(`Error: ${error.message}`);
+        }
+      } else if (typeof error === "string") {
+        toast.error(`Error: ${error}`);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+
       console.error("Error adding user:", error);
       toast.error("An unexpected error occurred. Please try again.");
     } finally {

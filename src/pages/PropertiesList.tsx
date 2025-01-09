@@ -41,6 +41,7 @@ const PropertiesList = () => {
   const [isOpenRemove, setIsOpenRemove] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isOpenAdd, setIsOpenAdd] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
@@ -100,6 +101,10 @@ const PropertiesList = () => {
     setSelectedProperty(property);
     setIsEditing(true);
   };
+  const handleAddPropertyModal = () => {
+    setSelectedFile(null);
+    setIsOpenAdd(true);
+  };
 
   const handleFileChange = (file: File, fieldName: string) => {
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -129,6 +134,8 @@ const PropertiesList = () => {
       if (!selectedProperty) {
         throw new Error("No property selected for editing.");
       }
+
+      setFormLoading(true);
 
       const formData = new FormData();
 
@@ -169,9 +176,30 @@ const PropertiesList = () => {
         dispatch(fetchProperties());
         closeEditModal();
       } else {
-        throw new Error(result.error.message || "Failed to update property");
+        const validationErrors = result.payload;
+        if (validationErrors) {
+          Object.entries(validationErrors).forEach(([, messages]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((message) => toast.error(message));
+            }
+          });
+        } else {
+          throw new Error(result.error.message || "Failed to update property.");
+        }
       }
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("Validation Error")) {
+          toast.error(
+            "Validation error: Please check the input fields or file types."
+          );
+        } else {
+          toast.error(`Error: ${error.message}`);
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+
       console.error("Error updating property:", error);
       toast.error("Failed to update property. Please try again.");
     }
@@ -179,6 +207,8 @@ const PropertiesList = () => {
 
   const handleDeleteProperty = async (id: number) => {
     try {
+      setFormLoading(true);
+
       const result = await dispatch(deleteProperty(id));
 
       if (deleteProperty.fulfilled.match(result)) {
@@ -192,22 +222,22 @@ const PropertiesList = () => {
         throw new Error(errorMessage);
       }
     } catch (error) {
-      console.error("Error deleting property:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred. Please try again."
-      );
-    }
-  };
+      if (error instanceof Error) {
+        toast.error(`Error: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred. Please try again.");
+      }
 
-  const handleAddPropertyModal = () => {
-    setSelectedFile(null);
-    setIsOpenAdd(true);
+      console.error("Error deleting property:", error);
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   const handleAddProperty = async (propertyData: Partial<Property>) => {
     try {
+      setFormLoading(true);
+
       const formData = new FormData();
 
       Object.keys(propertyData).forEach((key) => {
@@ -242,11 +272,34 @@ const PropertiesList = () => {
         setIsOpenAdd(false);
         dispatch(fetchProperties());
       } else {
-        throw new Error(result.error.message || "Failed to add property.");
+        const validationErrors = result.payload;
+        if (validationErrors) {
+          Object.entries(validationErrors).forEach(([, messages]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((message) => toast.error(message));
+            }
+          });
+        } else {
+          throw new Error(result.error.message || "Failed to add property.");
+        }
       }
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("Validation Error")) {
+          toast.error(
+            "Validation error: Please check the input fields or file types."
+          );
+        } else {
+          toast.error(`Error: ${error.message}`);
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+
       console.error("Error adding property:", error);
       toast.error("Failed to add property. Please try again.");
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -371,6 +424,8 @@ const PropertiesList = () => {
             onFileChange={handleFileChange}
             closeModal={closeEditModal}
             initializeData={initializePropertyData}
+            loading={formLoading}
+            submitLabel="Save"
           />
         </Modal>
       )}
@@ -386,6 +441,7 @@ const PropertiesList = () => {
           onFileChange={handleFileChange}
           closeModal={() => setIsOpenAdd(false)}
           initializeData={initializeAddPropertyData}
+          loading={formLoading}
         />
       </Modal>
     </div>
