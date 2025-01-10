@@ -329,25 +329,26 @@ const UsersList = () => {
           </select>
         </div>
       </div>
-
       <div className="grid gap-4">
         {currentUsers.map((user) => (
           <div
             key={user.id}
-            className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between dark:bg-gray-800"
+            className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between dark:bg-gray-800 overflow-hidden"
           >
             <Link
               to={`/user/${user.id}`}
-              className="flex items-center space-x-4"
+              className="flex items-center space-x-4 truncate"
             >
               <img
                 src={user.profile_image as string}
                 alt={user.name}
-                className="w-10 h-10 rounded-full object-inherit border border-gray-300 shadow-md dark:border-gray-600"
+                className="w-10 h-10 rounded-full object-inherit border border-gray-300 shadow-md dark:border-gray-600 flex-shrink-0"
               />
-              <div>
-                <h3 className="font-medium dark:text-gray-200">{user.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="truncate">
+                <h3 className="font-medium dark:text-gray-200 truncate">
+                  {user.name}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                   {user.email}
                 </p>
                 <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full dark:bg-indigo-800 dark:text-indigo-100">
@@ -376,7 +377,7 @@ const UsersList = () => {
               title="Are you sure you want to remove this User?"
               description="Deleting this user will permanently remove it from your company, and any data associated with it will be deleted, please make sure you want to do this?"
             >
-              <div className="flex items-center space-x-3 ">
+              <div className="flex items-center space-x-3">
                 <Button
                   onClick={() => handleDeleteUser(user.id)}
                   className="bg-red-600 w-full text-white font-bold text-[20px] p-3 rounded-[10px]"
