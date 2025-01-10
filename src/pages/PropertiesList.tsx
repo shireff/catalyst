@@ -50,6 +50,7 @@ const PropertiesList = () => {
   const closeEditModal = () => {
     setIsEditing(false);
     setSelectedProperty(null);
+    setFormLoading(false);
   };
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -99,6 +100,7 @@ const PropertiesList = () => {
 
   const handleEdit = (property: Property) => {
     setSelectedProperty(property);
+    setFormLoading(false);
     setIsEditing(true);
   };
   const handleAddPropertyModal = () => {
@@ -202,8 +204,11 @@ const PropertiesList = () => {
 
       console.error("Error updating property:", error);
       toast.error("Failed to update property. Please try again.");
+    } finally {
+      setFormLoading(false); 
     }
   };
+
 
   const handleDeleteProperty = async (id: number) => {
     try {
@@ -315,7 +320,9 @@ const PropertiesList = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Featured Properties</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          Featured Properties
+        </h1>
         <Button
           onClick={handleAddPropertyModal}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -328,7 +335,7 @@ const PropertiesList = () => {
         {currentProperties.map((property: Property) => (
           <div
             key={property.id}
-            className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+            className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow dark:bg-gray-800"
           >
             <Link to={`/properties/${property.id}`}>
               <Swiper
@@ -348,12 +355,14 @@ const PropertiesList = () => {
                 ))}
               </Swiper>
               <div className="p-4">
-                <h3 className="font-semibold text-lg mb-2">{property.name}</h3>
-                <div className="flex items-center text-gray-600 mb-2">
+                <h3 className="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-100">
+                  {property.name}
+                </h3>
+                <div className="flex items-center text-gray-600 mb-2 dark:text-gray-400">
                   <MapPin className="w-4 h-4 mr-1" />
                   <span className="text-sm">{property.location}</span>
                 </div>
-                <div className="flex items-center text-indigo-600">
+                <div className="flex items-center text-indigo-600 dark:text-indigo-400">
                   <DollarSign className="w-4 h-4" />
                   <span className="font-semibold">{property.price}</span>
                 </div>
@@ -362,14 +371,14 @@ const PropertiesList = () => {
             <div className="p-4 flex justify-between">
               <Button
                 onClick={() => handleEdit(property)}
-                className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full hover:bg-green-200"
+                className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full hover:bg-green-200 dark:bg-green-800 dark:text-green-100 dark:hover:bg-green-700"
               >
                 <Edit className="w-4 h-4 mr-1" />
                 Edit
               </Button>
               <Button
                 onClick={() => setIsOpenRemove(true)}
-                className="flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full hover:bg-red-200"
+                className="flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full hover:bg-red-200 dark:bg-red-800 dark:text-red-100 dark:hover:bg-red-700"
               >
                 <Trash2 className="w-4 h-4 mr-1" />
                 Delete
@@ -390,7 +399,7 @@ const PropertiesList = () => {
                 </Button>
                 <Button
                   onClick={() => setIsOpenRemove(false)}
-                  className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px]"
+                  className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px] dark:bg-gray-600 dark:text-gray-300"
                 >
                   No
                 </Button>
@@ -433,7 +442,7 @@ const PropertiesList = () => {
       <Modal
         isOpen={isOpenAdd}
         closeModal={() => setIsOpenAdd(false)}
-        title="Add New User"
+        title="Add New Property"
       >
         <EditForm
           fields={AddPropertyFields}

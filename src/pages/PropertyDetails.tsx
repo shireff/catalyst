@@ -26,11 +26,15 @@ const PropertyDetails = () => {
 
   if (error) {
     toast.error(error);
-    return <div className="text-center text-red-500">{error}</div>;
+    return (
+      <div className="text-center text-red-500 dark:text-red-400">{error}</div>
+    );
   }
 
   if (!selectedProperty) {
-    return <div className="text-center">Property not found</div>;
+    return (
+      <div className="text-center dark:text-gray-300">Property not found</div>
+    );
   }
 
   return (
@@ -55,27 +59,28 @@ const PropertyDetails = () => {
           </Swiper>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
-          <h1 className="text-4xl font-extrabold text-gray-800">
+        <div className="bg-white p-6 rounded-lg shadow-lg space-y-6 dark:bg-gray-800">
+          <h1 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">
             {selectedProperty.name}
           </h1>
 
-          <div className="flex items-center text-gray-600">
-            <MapPin className="w-5 h-5 mr-2 text-indigo-600" />
+          <div className="flex items-center text-gray-600 dark:text-gray-400">
+            <MapPin className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" />
             <span>{selectedProperty.location}</span>
           </div>
 
-          <div className="flex items-center text-indigo-600 text-2xl mb-6">
+          <div className="flex items-center text-indigo-600 text-2xl mb-6 dark:text-indigo-400">
             <DollarSign className="w-6 h-6" />
             <span className="font-semibold">{selectedProperty.price}</span>
-            <span className="text-gray-600 ml-1">/night</span>
           </div>
 
           <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4 dark:text-gray-100">
               Description
             </h2>
-            <p className="text-gray-600">{selectedProperty.description}</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {selectedProperty.description}
+            </p>
           </div>
         </div>
       </div>

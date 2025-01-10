@@ -5,7 +5,6 @@ export const editUserFields = [
     type: "file",
     required: false,
   },
-
   { label: "Name", name: "name", type: "text", required: true },
   { label: "Email", name: "email", type: "email", required: true },
   { label: "Phone", name: "phone", type: "tel", required: false },
@@ -65,17 +64,23 @@ export const AddBookingFields = [
   },
 ];
 export const PropertyFields = [
-  { label: "Property Name", name: "name", type: "text", required: true },
-  { label: "Location", name: "location", type: "text", required: true },
-  { label: "Price", name: "price", type: "number", required: true },
   {
     label: "Images",
     name: "images",
     type: "file",
     required: false,
   },
+  { label: "Property Name", name: "name", type: "text", required: true },
+  { label: "Location", name: "location", type: "text", required: true },
+  { label: "Price", name: "price", type: "number", required: true },
 ];
 export const AddPropertyFields = [
+  {
+    label: "Images",
+    name: "images",
+    type: "file",
+    required: false,
+  },
   { label: "Property Name", name: "name", type: "text", required: true },
   {
     label: "Property description",
@@ -85,10 +90,4 @@ export const AddPropertyFields = [
   },
   { label: "Location", name: "location", type: "text", required: true },
   { label: "Price", name: "price", type: "number", required: true },
-  {
-    label: "Image",
-    name: "profile_image",
-    type: "file",
-    required: false,
-  },
 ];

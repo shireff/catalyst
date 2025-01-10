@@ -119,13 +119,13 @@ export default function BookingsList() {
 
       console.error("Delete booking error:", error);
     } finally {
-      setFormLoading(false); 
+      setFormLoading(false);
     }
   };
 
   const handleConfirmBooking = async (id: number) => {
     try {
-      setFormLoading(true); 
+      setFormLoading(true);
       setIsOpenConfirm(false);
 
       const result = await dispatch(
@@ -184,7 +184,7 @@ export default function BookingsList() {
     }
 
     try {
-      setFormLoading(true); 
+      setFormLoading(true);
       const result = await dispatch(createBooking(payload));
 
       if (createBooking.fulfilled.match(result)) {
@@ -221,7 +221,9 @@ export default function BookingsList() {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
-        <h1 className="text-2xl font-bold">Bookings</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          Bookings
+        </h1>
         <Button
           onClick={() => setIsOpenAdd(true)}
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
@@ -231,25 +233,25 @@ export default function BookingsList() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead className="bg-gray-100">
+        <table className="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+          <thead className="bg-gray-100 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Booking ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 User Info
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Property Info
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Dates
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                 Actions
               </th>
             </tr>
@@ -257,50 +259,53 @@ export default function BookingsList() {
           {currentBooking.map((booking: Booking) => (
             <>
               <tbody>
-                <tr key={booking.id} className="border-b border-gray-200">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <tr
+                  key={booking.id}
+                  className="border-b border-gray-200 dark:border-gray-700"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     {booking.id}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     <div className="flex items-center space-x-4">
                       <img
                         src={booking.user.profile_image}
                         alt={booking.user.name}
-                        className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                        className="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600"
                       />
                       <div>
                         <p className="font-medium">{booking.user.name}</p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
                           {booking.user.email}
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
                           {booking.user.phone}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     <p className="font-medium">{booking.property.name}</p>
-                    <p className="text-gray-500 text-sm line-clamp-2">
+                    <p className="text-gray-500 text-sm line-clamp-2 dark:text-gray-400">
                       {booking.property.description}
                     </p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
                       {booking.property.location}
                     </p>
-                    <p className="text-indigo-600 font-semibold mt-1">
+                    <p className="text-indigo-600 font-semibold mt-1 dark:text-indigo-400">
                       ${booking.property.price} / night
                     </p>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                     <div className="flex items-center space-x-2">
-                      <Calendar className="w-5 h-5 text-gray-500" />
+                      <Calendar className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                       <p>{new Date(booking.start_date).toLocaleDateString()}</p>
                     </div>
                     <div className="flex items-center space-x-2 mt-2">
-                      <Clock className="w-5 h-5 text-gray-500" />
+                      <Clock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                       <p>{new Date(booking.end_date).toLocaleDateString()}</p>
                     </div>
                   </td>
@@ -309,7 +314,7 @@ export default function BookingsList() {
                     <span
                       className={`px-3 py-1 rounded-full text-xs ${
                         statusColors[booking.status] ||
-                        "bg-gray-100 text-gray-600"
+                        "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
                       }`}
                     >
                       {booking.status.charAt(0).toUpperCase() +
@@ -321,7 +326,7 @@ export default function BookingsList() {
                     <div className="flex space-x-2">
                       <Button
                         onClick={() => setIsOpenRemove(true)}
-                        className="flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full hover:bg-red-200"
+                        className="flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full hover:bg-red-200 dark:bg-red-800 dark:text-red-100 dark:hover:bg-red-700"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Delete
@@ -330,7 +335,7 @@ export default function BookingsList() {
                         <>
                           <Button
                             onClick={() => setIsOpenConfirm(true)}
-                            className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full hover:bg-green-200"
+                            className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full hover:bg-green-200 dark:bg-green-800 dark:text-green-100 dark:hover:bg-green-700"
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
                             Confirm
@@ -356,7 +361,7 @@ export default function BookingsList() {
                   </Button>
                   <Button
                     onClick={() => setIsOpenConfirm(false)}
-                    className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px]"
+                    className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px] dark:bg-gray-600 dark:text-gray-300"
                   >
                     No
                   </Button>
@@ -377,7 +382,7 @@ export default function BookingsList() {
                   </Button>
                   <Button
                     onClick={() => setIsOpenRemove(false)}
-                    className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px]"
+                    className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px] dark:bg-gray-600 dark:text-gray-300"
                   >
                     No
                   </Button>

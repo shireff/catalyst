@@ -301,7 +301,9 @@ const UsersList = () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 space-y-4 md:space-y-0">
-        <h1 className="text-3xl font-bold text-gray-800">Users</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+          Users
+        </h1>
 
         <div className="flex items-center space-x-4">
           <Button
@@ -313,7 +315,7 @@ const UsersList = () => {
           </Button>
 
           <select
-            className="border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
             value={selectedRole}
             onChange={(e) =>
               setSelectedRole(e.target.value as User["role"] | "all")
@@ -331,7 +333,7 @@ const UsersList = () => {
         {currentUsers.map((user) => (
           <div
             key={user.id}
-            className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between"
+            className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between dark:bg-gray-800"
           >
             <Link
               to={`/user/${user.id}`}
@@ -340,12 +342,14 @@ const UsersList = () => {
               <img
                 src={user.profile_image as string}
                 alt={user.name}
-                className="w-10 h-10 rounded-full object-inherit border border-gray-300 shadow-md"
+                className="w-10 h-10 rounded-full object-inherit border border-gray-300 shadow-md dark:border-gray-600"
               />
               <div>
-                <h3 className="font-medium">{user.name}</h3>
-                <p className="text-sm text-gray-500">{user.email}</p>
-                <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full">
+                <h3 className="font-medium dark:text-gray-200">{user.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {user.email}
+                </p>
+                <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full dark:bg-indigo-800 dark:text-indigo-100">
                   {user.role}
                 </span>
               </div>
@@ -353,15 +357,15 @@ const UsersList = () => {
             <div className="flex space-x-2">
               <Button
                 onClick={() => handleEditUser(user)}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className="p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-700"
               >
-                <Edit className="w-5 h-5 text-gray-600" />
+                <Edit className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </Button>
               <Button
                 onClick={() => setIsOpenRemove(true)}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className="p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-700"
               >
-                <Trash2 className="w-5 h-5 text-red-600" />
+                <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
               </Button>
             </div>
 
@@ -380,7 +384,7 @@ const UsersList = () => {
                 </Button>
                 <Button
                   onClick={() => setIsOpenRemove(false)}
-                  className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px]"
+                  className="bg-gray-200 w-full text-white font-bold text-[20px] p-3 rounded-[10px] dark:bg-gray-600 dark:text-gray-300"
                 >
                   No
                 </Button>
