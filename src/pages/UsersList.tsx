@@ -56,15 +56,20 @@ const UsersList = () => {
   const [selectedRole, setSelectedRole] = useState<User["role"] | "all">("all");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formLoading, setFormLoading] = useState(false);
-
+  const [searchText, setSearchText] = useState("");
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const filteredUsers =
-    selectedRole === "all"
-      ? users
-      : users.filter((user) => user.role === selectedRole);
+  const filteredUsers = users.filter((user) => {
+    const lowerSearchText = searchText.toLowerCase();
+    return (
+      (selectedRole === "all" || user.role === selectedRole) &&
+      (user.name.toLowerCase().includes(lowerSearchText) ||
+        user.email.toLowerCase().includes(lowerSearchText) ||
+        user.role.toLowerCase().includes(lowerSearchText))
+    );
+  });
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     const dateA = new Date(a.created_at || "").getTime();
@@ -301,22 +306,21 @@ const UsersList = () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 space-y-4 md:space-y-0">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200 text-center md:text-left">
           Users
         </h1>
 
-        <div className="flex items-center space-x-4">
-          <Button
-            onClick={handleAddUserModal}
-            className="px-5 py-2.5 rounded-lg font-medium shadow-md text-white transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 focus:ring-offset-white 
-            dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900"
-          >
-            + Add User
-          </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
+          <input
+            type="text"
+            placeholder="Search by name, email, or role..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="w-full sm:w-auto border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+          />
 
           <select
-            className="border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
+            className="w-full sm:w-auto border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
             value={selectedRole}
             onChange={(e) =>
               setSelectedRole(e.target.value as User["role"] | "all")
@@ -327,8 +331,18 @@ const UsersList = () => {
             <option value="client">Clients</option>
             <option value="admin">Admins</option>
           </select>
+
+          <Button
+            onClick={handleAddUserModal}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-lg font-medium shadow-md text-white transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 
+      bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 focus:ring-offset-white 
+      dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900"
+          >
+            + Add User
+          </Button>
         </div>
       </div>
+
       <div className="grid gap-4">
         {currentUsers.map((user) => (
           <div

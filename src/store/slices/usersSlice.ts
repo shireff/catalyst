@@ -29,17 +29,24 @@ const initialState: UsersState = {
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   try {
-    const response = await usersApi.getAll();
     const baseUrl = "https://test.catalystegy.com/public/";
 
-    const updatedUsers = Array.isArray(response.data)
-      ? response.data.map((user: User) => {
-          const profileImage =
-            user.profile_image && typeof user.profile_image === "string"
-              ? baseUrl + user.profile_image
-              : user.profile_image;
+    const response = await usersApi.getAll();
 
-          return { ...user, profile_image: profileImage };
+    const updatedUsers = Array.isArray(response.data)
+      ? response.data.map((user) => {
+          let { profile_image } = user;
+
+          if (
+            profile_image &&
+            typeof profile_image === "string" &&
+            !profile_image.startsWith("http://") &&
+            !profile_image.startsWith("https://")
+          ) {
+            profile_image = baseUrl + profile_image;
+          }
+
+          return { ...user, profile_image };
         })
       : [];
 
@@ -59,10 +66,16 @@ export const fetchUser = createAsyncThunk(
 
       const user = response.data;
 
-      const profileImage =
-        user.profile_image && typeof user.profile_image === "string"
-          ? baseUrl + user.profile_image
-          : user.profile_image;
+      let profileImage = user.profile_image;
+
+      if (
+        profileImage &&
+        typeof profileImage === "string" &&
+        !profileImage.startsWith("http://") &&
+        !profileImage.startsWith("https://")
+      ) {
+        profileImage = baseUrl + profileImage;
+      }
 
       return { ...user, profile_image: profileImage };
     } catch (error) {
