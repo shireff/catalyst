@@ -221,11 +221,14 @@ export default function BookingsList() {
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
           Bookings
         </h1>
+
         <Button
           onClick={() => setIsOpenAdd(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+          className="px-5 py-2.5 rounded-lg font-medium shadow-md text-white transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 
+             bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 focus:ring-offset-white 
+             dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900"
         >
-          Add New
+          + Add New
         </Button>
       </div>
 

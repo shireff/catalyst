@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { User } from "../types";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit } from "lucide-react";
 import toast from "react-hot-toast";
 import Loading from "../components/Loading";
 import CustomPaginationComponent from "../components/CustomPaginationComponent";
@@ -308,10 +308,11 @@ const UsersList = () => {
         <div className="flex items-center space-x-4">
           <Button
             onClick={handleAddUserModal}
-            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-5 py-2.5 rounded-lg font-medium shadow-md text-white transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 focus:ring-offset-white 
+            dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900"
           >
-            <Plus className="w-5 h-5 mr-2" />
-            Add User
+            + Add User
           </Button>
 
           <select
