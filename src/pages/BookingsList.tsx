@@ -13,7 +13,6 @@ import {
 } from "@/store/slices/bookingsSlice";
 import CustomPaginationComponent from "@/components/CustomPaginationComponent";
 import Button from "@/components/ui/Button";
-import { sortDate } from "@/utils/sortData";
 import Modal from "@/components/ui/Modal";
 import EditForm from "@/components/EditForm";
 import { AddBookingFields } from "@/data";
@@ -63,9 +62,7 @@ export default function BookingsList() {
     dispatch(fetchBookings());
   }, [dispatch]);
 
-  const sortedBookings = sortDate(bookings, "createdAt", "desc");
-
-  const currentBooking = sortedBookings.slice(
+  const currentBooking = [...bookings].slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

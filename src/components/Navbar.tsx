@@ -35,18 +35,18 @@ function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <img className="w-[50%]" src={Logo} alt="" />
+            <img className="w-[50%]" src={Logo} alt="" />{" "}
           </Link>
 
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             {navItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
                 to={path}
-                className={`flex items-center space-x-1 ${
+                className={`flex items-center space-x-1 px-4 py-2 rounded-lg ${
                   location.pathname === path
-                    ? "text-indigo-600"
-                    : "text-gray-600 hover:text-indigo-600"
+                    ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900"
+                    : "text-gray-600 hover:text-indigo-600 dark:text-gray-100 dark:hover:text-indigo-400"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -54,36 +54,37 @@ function Navbar() {
               </Link>
             ))}
           </div>
+          <div>
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"
+            >
+              {isDarkMode ? (
+                <Sun className="w-6 h-6 text-yellow-500" />
+              ) : (
+                <Moon className="w-6 h-6 text-gray-500" />
+              )}
+            </button>
 
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"
-          >
-            {isDarkMode ? (
-              <Sun className="w-6 h-6 text-yellow-500" />
-            ) : (
-              <Moon className="w-6 h-6 text-gray-500" />
-            )}
-          </button>
-
-          <button
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4">
+          <div className="md:hidden py-4 space-y-2">
             {navItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
                 to={path}
-                className={`flex items-center space-x-2 px-4 py-2 ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${
                   location.pathname === path
                     ? "text-indigo-600 bg-indigo-50"
-                    : "text-gray-600"
+                    : "text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
