@@ -54,7 +54,7 @@ function Navbar() {
               </Link>
             ))}
           </div>
-          <div>
+          <div className="flex items-center">
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600"

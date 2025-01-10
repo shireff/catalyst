@@ -44,10 +44,10 @@ const UserDetails = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white rounded-lg shadow-lg space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg space-y-8">
       <Link
         to="/users"
-        className="text-blue-600 hover:text-blue-800 inline-block text-lg font-semibold"
+        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-500 inline-block text-lg font-semibold"
       >
         &larr; Back to Users List
       </Link>
@@ -57,19 +57,27 @@ const UserDetails = () => {
           <img
             src={user.profile_image}
             alt={user.name}
-            className="w-32 h-32 rounded-full object-inherit border border-gray-300 shadow-md"
+            className="w-32 h-32 rounded-full object-cover border border-gray-300 dark:border-gray-600 shadow-md"
           />
         ) : (
-          <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 shadow-md">
+          <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 shadow-md">
             No Image
           </div>
         )}
 
         <div className="mt-6 lg:mt-0 text-center lg:text-left">
-          <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
-          <p className="text-gray-600 text-lg mt-2">{user.email}</p>
-          {user.phone && <p className="text-gray-600">{user.phone}</p>}
-          <span className="inline-block mt-4 text-sm px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {user.name}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg mt-2">
+            {user.email}
+          </p>
+          {user.phone ? (
+            <p className="text-gray-600 dark:text-gray-400">{user.phone}</p>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400">No Phone Number</p>
+          )}
+          <span className="inline-block mt-4 text-sm px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full">
             {user.role}
           </span>
         </div>
@@ -77,19 +85,19 @@ const UserDetails = () => {
 
       {user.intro_video ? (
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Intro Video
           </h2>
           <video
             controls
-            className="w-full max-w-4xl h-auto rounded-lg border border-gray-300 shadow-md"
+            className="w-full max-w-4xl h-auto rounded-lg border border-gray-300 dark:border-gray-600 shadow-md"
             src={user.intro_video}
           >
             Your browser does not support the video tag.
           </video>
         </div>
       ) : (
-        <div className="text-gray-500 text-center lg:text-left">
+        <div className="text-gray-500 dark:text-gray-400 text-center lg:text-left">
           No Intro Video Available
         </div>
       )}
